@@ -1,0 +1,47 @@
+type Contract {
+    id: ID!
+    title: String!
+    moveIn: String!
+    rent: Int
+    tenant: Tenant
+}
+
+extend type Query {
+    findAllContracts: [Contract]!
+    countContracts: Long!
+}
+
+#extend type Mutation {
+#    newContract(title: String!, moveIn: String!, rent: Int, tenant: ID!) : Contract!
+#    deleteContract(id: ID!) : Boolean
+#    updateContractRent(rent: Int!, id: ID!) : Contract!
+#}
+
+extend type Mutation {
+    newContractAndTenant(input: ContractTenantInput!): ContractPayload!
+    newContract(input: ContractInput!) : ContractPayload!
+    deleteContract(id: ID!) : Boolean
+    updateContractRent(rent: Int!, id: ID!) : ContractPayload!
+}
+
+input ContractInput {
+    title: String!
+    moveIn: String!
+    rent: Int
+    tenant: ID!
+}
+
+type ContractPayload{
+    id: ID!
+    title: String!
+    moveIn: String!
+    rent: Int
+    tenant: Tenant
+}
+
+input ContractTenantInput {
+    title: String!
+    moveIn: String!
+    rent: Int
+    tenant: AddTenantInput!
+}

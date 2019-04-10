@@ -1,0 +1,92 @@
+interface Node {
+    id: String!
+}
+
+
+#### TENANT SERVICE
+type Tenant implements Node {
+    title: Title # enum
+    salutation: Salutation! # enum
+    firstName: String!
+    lastName: String!
+    email: String!
+    dateOfBirth: Date!
+    address: Address! # reference
+    phones: [Phone!]! # TODO reference or plain numbers
+    contracts: [ContractRelation!]! # reference
+}
+
+type Address {
+    street: String!
+    zip: String!
+    city: String!
+    country: String!
+}
+enum Salutation {
+    MISTER
+    MISTRESS
+}
+enum Title {
+    DR
+    PROF
+}
+
+type Phone {
+    number: String!
+    type: PhoneType! # TODO do we need this information?
+}
+enum PhoneType {
+    WORK
+    HOME
+    MOBILE
+}
+
+enum TenantType {
+    MAIN_TENANT
+    RESIDENT
+    GUARANTOR
+}
+
+
+
+#### CONTRACT SERVICE
+type Contract implements Node{
+    contractNo: String! # e.g. 6301_A24_032
+    tenants: [Tenant!]!
+    documents: [Document!]
+    leaseData: LeaseData! # TODO: whats the correct approach for this data?
+    property: Property! # only one property. TODO is multiple properties per contract still a thing?
+}
+
+type Document {
+    uuid: String! # document-service id
+}
+type Property {
+    unit: String! # unit = apartment  # uuid is saved in the microservice
+}
+
+
+
+#### LEASE DATA SERVICE
+type LeaseData implements Node{
+    moveIn: Date!
+    moveOut: Date
+    leaseStart: Date!
+    leaseExpiration: Date
+    rent: Float!
+    charges: Float!
+    deposit: Float!
+    index: String! # TODO which format or information should hold this field? Examples
+    contract: Contract!
+}
+
+
+
+
+type Query {
+
+}
+
+type Mutation {
+
+}
